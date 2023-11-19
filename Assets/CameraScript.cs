@@ -16,8 +16,8 @@ public class CameraScript : MonoBehaviour
 
     
     
-    readonly private string shapeName = "Black_Square_H_";
-    public static int shapeIndex = 7;
+    readonly private string shapeName = "Pink_Triangle";
+    public static int shapeIndex = 14;
 
     public GameObject TLTarget;
     public GameObject BRTarget;
@@ -29,7 +29,7 @@ public class CameraScript : MonoBehaviour
     public static Boolean swapPage = false;
 
     private int prevPicTaken = -1;
-    private int prevShapeIndex = 7;
+    private int prevShapeIndex = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -89,11 +89,15 @@ public class CameraScript : MonoBehaviour
                         Debug.Log("Height: " + widthHeight.y);
                         Debug.Log("Center Position: " + centerPos.ToString());
 
+                        Debug.Log("The current prevPicTaken is: " + prevPicTaken);
+
                         //change to train
                         string filePath = "C:\\Data\\Buckeye Vertical\\Prelim Detection Dataset\\train\\labels\\" + shapeIndex + "_" + picturesTaken.ToString() + ".txt";
                         string textToWrite = shapeIndex + " " + normalize(centerPos.x, AspectRatio.x).ToString() + " " + normalize(centerPos.y, AspectRatio.y).ToString() + " " + normalize(widthHeight.x, AspectRatio.x) + " " + normalize(widthHeight.y, AspectRatio.y);
 
-                        if (File.Exists("C:\\Data\\Buckeye Vertical\\Prelim Detection Dataset\\train\\images\\" + prevShapeIndex + "_" + prevPicTaken.ToString() + ".png") || prevPicTaken == -1)
+                        Debug.Log("WE ARE ABOUT TO TAKE A SCREENSHOT");
+                        //Rough Solution
+                        if (File.Exists("C:\\Data\\Buckeye Vertical\\Prelim Detection Dataset\\train\\images\\" + prevShapeIndex + "_" + prevPicTaken.ToString() + ".png") || prevPicTaken == -1|| File.Exists("C:\\Data\\Buckeye Vertical\\Prelim Detection Dataset\\valid\\images\\" + prevShapeIndex + "_" + prevPicTaken.ToString() + ".png"))
                         {
                             // Create a new StreamWriter and write the text to the file
                             using (StreamWriter writer = new StreamWriter(filePath))
@@ -102,6 +106,7 @@ public class CameraScript : MonoBehaviour
                             }
 
                             //CHANGE TO TRAIN
+                            Debug.Log("WE HAVE TAKEN A SCREENSHOT");
                             ScreenCapture.CaptureScreenshot("C:\\Data\\Buckeye Vertical\\Prelim Detection Dataset\\train\\images\\" + shapeIndex + "_" + picturesTaken.ToString() + ".png");
                             prevPicTaken = picturesTaken;
                             prevShapeIndex = shapeIndex;
@@ -124,7 +129,7 @@ public class CameraScript : MonoBehaviour
                         string filePath = "C:\\Data\\Buckeye Vertical\\Prelim Detection Dataset\\valid\\labels\\" + shapeIndex + "_" + picturesTaken.ToString() + ".txt";
                         string textToWrite = shapeIndex + " " + normalize(centerPos.x, AspectRatio.x).ToString() + " " + normalize(centerPos.y, AspectRatio.y).ToString() + " " + normalize(widthHeight.x, AspectRatio.x) + " " + normalize(widthHeight.y, AspectRatio.y);
 
-                        if (File.Exists("C:\\Data\\Buckeye Vertical\\Prelim Detection Dataset\\valid\\images\\" + prevShapeIndex + "_" + prevPicTaken.ToString() + ".png") || prevPicTaken == -1)
+                        if (File.Exists("C:\\Data\\Buckeye Vertical\\Prelim Detection Dataset\\valid\\images\\" + prevShapeIndex + "_" + prevPicTaken.ToString() + ".png") || prevPicTaken == -1 || File.Exists("C:\\Data\\Buckeye Vertical\\Prelim Detection Dataset\\train\\images\\" + prevShapeIndex + "_" + prevPicTaken.ToString() + ".png"))
                         {
                             // Create a new StreamWriter and write the text to the file
                             using (StreamWriter writer = new StreamWriter(filePath))
