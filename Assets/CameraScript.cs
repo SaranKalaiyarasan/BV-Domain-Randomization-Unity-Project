@@ -17,7 +17,7 @@ public class CameraScript : MonoBehaviour
     
     
     readonly private string shapeName = "Pink_Triangle";
-    public static int shapeIndex = 14;
+    public static int shapeIndex = 37;
 
     public GameObject TLTarget;
     public GameObject BRTarget;
@@ -80,72 +80,51 @@ public class CameraScript : MonoBehaviour
 
                 if (verifyBounds(centerPos))
                 {
+                    string screenShotPath;
+                    string filePath;
+
                     //Every four pictures sent to train set
-                    if (counter % 5 != 0)
+                    if (picturesTaken % 5 != 0)
                     {
-                        Debug.Log(" ");
-                        Debug.Log(picturesTaken.ToString());
-                        Debug.Log("Width: " + widthHeight.x);
-                        Debug.Log("Height: " + widthHeight.y);
-                        Debug.Log("Center Position: " + centerPos.ToString());
-
-                        Debug.Log("The current prevPicTaken is: " + prevPicTaken);
-
-                        //change to train
-                        string filePath = "C:\\Data\\Buckeye Vertical\\Prelim Detection Dataset\\train\\labels\\" + shapeIndex + "_" + picturesTaken.ToString() + ".txt";
-                        string textToWrite = shapeIndex + " " + normalize(centerPos.x, AspectRatio.x).ToString() + " " + normalize(centerPos.y, AspectRatio.y).ToString() + " " + normalize(widthHeight.x, AspectRatio.x) + " " + normalize(widthHeight.y, AspectRatio.y);
-
-                        Debug.Log("WE ARE ABOUT TO TAKE A SCREENSHOT");
-                        //Rough Solution
-                        if (File.Exists("C:\\Data\\Buckeye Vertical\\Prelim Detection Dataset\\train\\images\\" + prevShapeIndex + "_" + prevPicTaken.ToString() + ".png") || prevPicTaken == -1|| File.Exists("C:\\Data\\Buckeye Vertical\\Prelim Detection Dataset\\valid\\images\\" + prevShapeIndex + "_" + prevPicTaken.ToString() + ".png"))
-                        {
-                            // Create a new StreamWriter and write the text to the file
-                            using (StreamWriter writer = new StreamWriter(filePath))
-                            {
-                                writer.WriteLine(textToWrite);
-                            }
-
-                            //CHANGE TO TRAIN
-                            Debug.Log("WE HAVE TAKEN A SCREENSHOT");
-                            ScreenCapture.CaptureScreenshot("C:\\Data\\Buckeye Vertical\\Prelim Detection Dataset\\train\\images\\" + shapeIndex + "_" + picturesTaken.ToString() + ".png");
-                            prevPicTaken = picturesTaken;
-                            prevShapeIndex = shapeIndex;
-
-                            counter++;
-                            picturesTaken++;
-                            Debug.Log("Hello");
-                        }
+                        screenShotPath = "C:\\Data\\Buckeye Vertical\\Image Classifier\\Prelim Detection Dataset\\train\\images\\" + shapeIndex + "_" + picturesTaken.ToString() + ".png";
+                        filePath = "C:\\Data\\Buckeye Vertical\\Image Classifier\\Prelim Detection Dataset\\train\\labels\\" + shapeIndex + "_" + picturesTaken.ToString() + ".txt";
                     }
                     //Every fifth picture sent to validation set
                     else
                     {
-                        Debug.Log(" ");
-                        Debug.Log(picturesTaken.ToString());
-                        Debug.Log("Width: " + widthHeight.x);
-                        Debug.Log("Height: " + widthHeight.y);
-                        Debug.Log("Center Position: " + centerPos.ToString());
+                        screenShotPath = "C:\\Data\\Buckeye Vertical\\Image Classifier\\Prelim Detection Dataset\\valid\\images\\" + shapeIndex + "_" + picturesTaken.ToString() + ".png";
+                        filePath = "C:\\Data\\Buckeye Vertical\\Image Classifier\\Prelim Detection Dataset\\valid\\labels\\" + shapeIndex + "_" + picturesTaken.ToString() + ".txt";
+                    }
 
-                        //change to train
-                        string filePath = "C:\\Data\\Buckeye Vertical\\Prelim Detection Dataset\\valid\\labels\\" + shapeIndex + "_" + picturesTaken.ToString() + ".txt";
-                        string textToWrite = shapeIndex + " " + normalize(centerPos.x, AspectRatio.x).ToString() + " " + normalize(centerPos.y, AspectRatio.y).ToString() + " " + normalize(widthHeight.x, AspectRatio.x) + " " + normalize(widthHeight.y, AspectRatio.y);
+                    Debug.Log(" ");
+                    Debug.Log(picturesTaken.ToString());
+                    Debug.Log("Width: " + widthHeight.x);
+                    Debug.Log("Height: " + widthHeight.y);
+                    Debug.Log("Center Position: " + centerPos.ToString());
 
-                        if (File.Exists("C:\\Data\\Buckeye Vertical\\Prelim Detection Dataset\\valid\\images\\" + prevShapeIndex + "_" + prevPicTaken.ToString() + ".png") || prevPicTaken == -1 || File.Exists("C:\\Data\\Buckeye Vertical\\Prelim Detection Dataset\\train\\images\\" + prevShapeIndex + "_" + prevPicTaken.ToString() + ".png"))
+                    Debug.Log("The current prevPicTaken is: " + prevPicTaken);
+
+                    //change to train
+                    string textToWrite = shapeIndex + " " + normalize(centerPos.x, AspectRatio.x).ToString() + " " + normalize(centerPos.y, AspectRatio.y).ToString() + " " + normalize(widthHeight.x, AspectRatio.x) + " " + normalize(widthHeight.y, AspectRatio.y);
+
+                    Debug.Log("WE ARE ABOUT TO TAKE A SCREENSHOT");
+                    //Rough Solution
+                    if (File.Exists("C:\\Data\\Buckeye Vertical\\Image Classifier\\Prelim Detection Dataset\\train\\images\\" + prevShapeIndex + "_" + prevPicTaken.ToString() + ".png") || prevPicTaken == -1|| File.Exists("C:\\Data\\Buckeye Vertical\\Prelim Detection Dataset\\valid\\images\\" + prevShapeIndex + "_" + prevPicTaken.ToString() + ".png"))
+                    {
+                        // Create a new StreamWriter and write the text to the file
+                        using (StreamWriter writer = new StreamWriter(filePath))
                         {
-                            // Create a new StreamWriter and write the text to the file
-                            using (StreamWriter writer = new StreamWriter(filePath))
-                            {
-                                writer.WriteLine(textToWrite);
-                            }
-
-                            //CHANGE TO TRAIN
-                            ScreenCapture.CaptureScreenshot("C:\\Data\\Buckeye Vertical\\Prelim Detection Dataset\\valid\\images\\" + shapeIndex + "_" + picturesTaken.ToString() + ".png");
-                            prevPicTaken = picturesTaken;
-                            prevShapeIndex = shapeIndex;
-
-                            counter++;
-                            picturesTaken++;
-                            Debug.Log("Hello");
+                            writer.WriteLine(textToWrite);
                         }
+
+                        //CHANGE TO TRAIN
+                        Debug.Log("WE HAVE TAKEN A SCREENSHOT");
+                        ScreenCapture.CaptureScreenshot(screenShotPath);
+                        prevPicTaken = picturesTaken;
+                        prevShapeIndex = shapeIndex;
+
+                        picturesTaken++;
+                        Debug.Log("Hello");
                     }
                 }
             }

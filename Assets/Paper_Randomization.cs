@@ -11,7 +11,10 @@ public class Paper_Randomization : MonoBehaviour
     {
         
     }
-
+    //shapeName= 7
+    private int matColor = 7;
+    private int matShape = 7;
+    private int matDigit = 89;
     // Update is called once per frame
     void Update()
     {
@@ -21,7 +24,8 @@ public class Paper_Randomization : MonoBehaviour
         }
         if (CameraScript.swapPage)
         {
-            Material yourMaterial = Resources.Load("Images/Materials/" + CameraScript.shapeIndex, typeof(Material)) as Material;
+            string matName = getMaterialName();
+            Material yourMaterial = Resources.Load("Images/Materials/" + matName, typeof(Material)) as Material;
             this.gameObject.GetComponent<Renderer>().material = yourMaterial;
         }
     }
@@ -33,5 +37,29 @@ public class Paper_Randomization : MonoBehaviour
         Color newColor = new Color(oldColor.r, oldColor.g, oldColor.b, alphaVal);
         mat.SetColor("_Color", newColor);
 
+    }
+
+    string getMaterialName()
+    {
+        matDigit--;
+        if(matDigit == 64)
+        {
+            matDigit = 57;
+        }
+        if(matDigit == 47)
+        {
+            matColor--;
+            matDigit = 90;
+        }
+        if(matColor < 0)
+        {
+            matShape--;
+            matColor = 7;
+        }
+        if (matShape < 0)
+        {
+            Debug.Log("MATERIAL SHOULD NOT EXIST");
+        }
+        return (matShape.ToString()+matColor.ToString()+matDigit.ToString());
     }
 }
