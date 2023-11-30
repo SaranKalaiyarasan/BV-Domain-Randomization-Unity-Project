@@ -1,2 +1,0 @@
-# BV Domain Randomization Unity Project
- This is the code for the Buckeye Vertical at The Ohio State University. This Unity project was developed to generate a variety of images to train a nueral network designed to detect vision targets from 80 feet in the air. The vision targets can be any combinations of letters/numbers, colors, and shapes. So this code will generate images of all possible combinations, and a variety of environmental factors such as sun angle, pavement textures and many more.
