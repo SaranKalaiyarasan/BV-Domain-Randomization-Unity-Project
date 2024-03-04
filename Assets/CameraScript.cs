@@ -12,35 +12,53 @@ public class CameraScript : MonoBehaviour
 
     public static int picturesTaken = 0;
     public static int counter = 0;
-    readonly public static int totalpics = 10;//50;
+    readonly public static int totalpics = 2;//50;
     readonly private Vector2 AspectRatio = new Vector2(1920, 1080);
 
-    const string workingDirectory = "C:\\Data\\Buckeye Vertical\\Image Classifier\\Prelim Detection Dataset";
+    const string workingDirectory = "F:\\Data\\Buckeye Vertical\\Image Classifier\\Prelim Detection Dataset";
     //const string workingDirectory = "U:\\Prelim Detection Dataset";
 
     public PayloadTargetContents[] payloadTargets;
     public GameObject road;
     public static Boolean swapPage = false;
+    public static Boolean swapRoad = false;
 
     private int fileCount = 0;
     private int prevFileCount = 0;
 
     private int totalObjects = 2304;
+    private int fileCountConstant = 0;
 
-    private int numPayloads = 4;
+    //CHANGE THIS!!
+    private int numPayloads = 8;
 
     private int prevPicTaken = -1;
 
     private void randomizeSun()
     {
-        float angle = rnd.Next(0, 200);
+        // Random angle between 0 and 200 degrees.
+        float angle = rnd.Next(0, 180);
         sun.transform.localRotation = Quaternion.Euler(angle, 0, 0);
+
+        // Calculate intensity based on the angle.
+        // Assuming maximum intensity is 2 and minimum is 0.5 for demonstration.
+        float maxIntensity = 1.3f;
+        float minIntensity = 1.0f;
+
+        // Normalize angle for intensity calculation (making 90 degrees = 1, 0 and 180 degrees = 0)
+        float normalizedAngle = Mathf.Abs(angle - 90) / 90.0f; // This will give 0 at 90 degrees and 1 at 0 or 180 degrees.
+
+        // Calculate intensity (inverse relationship with the normalized angle).
+        float intensity = maxIntensity - (normalizedAngle * (maxIntensity - minIntensity));
+
+        // Set the sun's intensity.
+        sun.GetComponent<Light>().intensity = intensity;
     }
 
     private void randomizeCamera()
     {
         float x = rnd.Next(-60, 60);
-        float y = rnd.Next(100, 150);
+        float y = rnd.Next(150, 200);
         float z = rnd.Next(-25, 25);
         cam.transform.localPosition = new Vector3(x, y, z);
 
@@ -84,7 +102,7 @@ public class CameraScript : MonoBehaviour
                 {
                     // Randomize rotation
                     float rotation_y = rnd.Next(0, 359);
-                    targetContent.target.transform.localRotation = Quaternion.Euler(0, rotation_y, 0);
+                    targetContent.target.transform.localRotation = Quaternion.Euler(0, rotation_y, 2);
 
                     placedPositions.Add(newPosition); // Add this position to the list
                 }
@@ -103,13 +121,11 @@ public class CameraScript : MonoBehaviour
 
     private Vector3 GetRandomPosition()
     {
-        float x = rnd.Next(-72, 106);
-        float z = rnd.Next(-73, 60);
-        return new Vector3(x, 0.6f, z);
+        float x = rnd.Next(-150, 200); //rnd.Next(-72, 106);
+        float z = rnd.Next(-150, 200); //rnd.Next(-73, 60);
+        return new Vector3(x, 1.0f, z);
     }
 
-
-    private float minimumDistance = 20.0f; // Adjust as needed
 
     //Returns a string comprised of all payload object's class, normalized x and y value, and normalized width and height
     private string GenerateNormalizedDataString()
@@ -237,14 +253,6 @@ public class CameraScript : MonoBehaviour
     
     void Update()
     {
-        if(picturesTaken >= (int)((3 * totalpics) / 4))
-        {
-            road.SetActive(false);
-        }
-        else
-        {
-            road.SetActive(true);
-        }
 
         if (picturesTaken <= totalpics){
             if(!swapPage)
@@ -258,18 +266,18 @@ public class CameraScript : MonoBehaviour
                     //Every four pictures sent to train set
                     if (picturesTaken % 5 != 0)
                     {
-                        screenShotPath = workingDirectory + "\\train\\images\\" + fileCount + "_" + picturesTaken.ToString() + ".png";
-                        filePath = workingDirectory + "\\train\\labels\\" + fileCount + "_" + picturesTaken.ToString() + ".txt";
+                        screenShotPath = workingDirectory + "\\train\\images\\" + (fileCount+fileCountConstant) + "_" + picturesTaken.ToString() + ".png";
+                        filePath = workingDirectory + "\\train\\labels\\" + (fileCount+fileCountConstant) + "_" + picturesTaken.ToString() + ".txt";
                     }
                     //Every fifth picture sent to validation set
                     else
                     {
-                        screenShotPath = workingDirectory + "\\valid\\images\\" + fileCount + "_" + picturesTaken.ToString() + ".png";
-                        filePath = workingDirectory + "\\valid\\labels\\" + fileCount + "_" + picturesTaken.ToString() + ".txt";
+                        screenShotPath = workingDirectory + "\\valid\\images\\" + (fileCount+fileCountConstant) + "_" + picturesTaken.ToString() + ".png";
+                        filePath = workingDirectory + "\\valid\\labels\\" + (fileCount+fileCountConstant) + "_" + picturesTaken.ToString() + ".txt";
                     }
 
-                    if(File.Exists(workingDirectory + "\\train\\images\\" + prevFileCount + "_" + prevPicTaken.ToString() + ".png") ||
-                    prevPicTaken == -1|| File.Exists(workingDirectory + "\\valid\\images\\" + prevFileCount + "_" + prevPicTaken.ToString() + ".png"))
+                    if(File.Exists(workingDirectory + "\\train\\images\\" + (prevFileCount + fileCountConstant) + "_" + prevPicTaken.ToString() + ".png") ||
+                    prevPicTaken == -1|| File.Exists(workingDirectory + "\\valid\\images\\" + (prevFileCount + fileCountConstant) + "_" + prevPicTaken.ToString() + ".png"))
                     {
                         // Create a new StreamWriter and write the text to the file
                         using (StreamWriter writer = new StreamWriter(filePath))
@@ -288,6 +296,8 @@ public class CameraScript : MonoBehaviour
             }
             else
             {
+                swapRoad = false;
+                Debug.Log(swapRoad);
                 swapPage = false;
             }
         }
@@ -297,6 +307,8 @@ public class CameraScript : MonoBehaviour
             if(fileCount < (totalObjects/numPayloads)-1)
             {
                 fileCount++;
+                swapRoad = true;
+                Debug.Log(swapRoad);
                 swapPage = true;
                 picturesTaken = 0;
             }
