@@ -32,7 +32,7 @@ def add_noise_to_directory(input_dir, output_dir):
     image_files = [f for f in os.listdir(input_dir) if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
 
     # Determine the number of images to randomly select for noise addition
-    num_to_select = len(image_files) // 3
+    num_to_select = int(len(image_files) // 4)
 
     # Randomly select about 1/3 of the images to add noise to
     selected_files = random.sample(image_files, num_to_select)
@@ -43,7 +43,7 @@ def add_noise_to_directory(input_dir, output_dir):
         output_path = os.path.join(output_dir, filename)
         if filename in selected_files:
             # Generate a random intensity for each image
-            noise_intensity = random.uniform(0, 1)
+            noise_intensity = random.uniform(0, 0.5)
             print(f"Adding noise to: {filename} with intensity: {noise_intensity}")
             add_noise_to_image(input_path, output_path, noise_intensity)
         else:
@@ -52,7 +52,7 @@ def add_noise_to_directory(input_dir, output_dir):
     print("Processing complete.")
 
 # Example usage: Adjust 'input_directory' and 'output_directory' to your paths
-input_directory = "F:\\Data\\Buckeye Vertical\\Image Classifier\\Prelim Detection Dataset\\train\\images"
-output_directory = "F:\\Data\\Buckeye Vertical\\Image Classifier\\Prelim Detection Dataset\\train\\imagesnoise"
+input_directory = "E:\\Data\\Buckeye Vertical\\Image Classifier\\Mar26\\valid\\images"
+output_directory = "E:\\Data\\Buckeye Vertical\\Image Classifier\\Mar26\\valid\\imagesnoise"
 
 add_noise_to_directory(input_directory, output_directory)

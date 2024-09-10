@@ -57,6 +57,7 @@ public class SharedMaterialsManager : MonoBehaviour
         List<int> alphanumerics = new List<int>();
         for (int i = 48; i <= 57; i++) alphanumerics.Add(i); // ASCII codes for 0-9
         for (int i = 65; i <= 90; i++) alphanumerics.Add(i); // ASCII codes for A-Z
+        List<int> fonts = new List<int>(){0,1,2,3};
 
         List<string> firstShapeMaterials = new List<string>();
 
@@ -66,8 +67,11 @@ public class SharedMaterialsManager : MonoBehaviour
             {
                 foreach (int code in alphanumerics)
                 {
-                    string materialName = shape.ToString() + color.ToString() + code.ToString();
+                    foreach (int font in fonts)
+                    {
+                    string materialName = shape.ToString() + color.ToString() + code.ToString() + font.ToString();
                     firstShapeMaterials.Add(materialName);
+                    }
                 }
             }
         }

@@ -12,10 +12,10 @@ public class CameraScript : MonoBehaviour
 
     public static int picturesTaken = 0;
     public static int counter = 0;
-    readonly public static int totalpics = 2;//50;
+    readonly public static int totalpics = 3;//50;
     readonly private Vector2 AspectRatio = new Vector2(1920, 1080);
 
-    const string workingDirectory = "F:\\Data\\Buckeye Vertical\\Image Classifier\\Prelim Detection Dataset";
+    const string workingDirectory = "D:\\Data\\Buckeye Vertical\\Image Classifier";
     //const string workingDirectory = "U:\\Prelim Detection Dataset";
 
     public PayloadTargetContents[] payloadTargets;
@@ -26,8 +26,8 @@ public class CameraScript : MonoBehaviour
     private int fileCount = 0;
     private int prevFileCount = 0;
 
-    private int totalObjects = 2304;
-    private int fileCountConstant = 0;
+    private int totalObjects = 9216;
+    private int fileCountConstant = 1152;
 
     //CHANGE THIS!!
     private int numPayloads = 8;
@@ -123,7 +123,7 @@ public class CameraScript : MonoBehaviour
     {
         float x = rnd.Next(-150, 200); //rnd.Next(-72, 106);
         float z = rnd.Next(-150, 200); //rnd.Next(-73, 60);
-        return new Vector3(x, 1.0f, z);
+        return new Vector3(x, 3.0f, z);
     }
 
 
