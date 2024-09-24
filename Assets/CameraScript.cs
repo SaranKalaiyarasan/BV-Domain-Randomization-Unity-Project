@@ -12,13 +12,14 @@ public class CameraScript : MonoBehaviour
 
     public static int picturesTaken = 0;
     public static int counter = 0;
-    readonly public static int totalpics = 3;//50;
+    readonly public static int totalpics = 3;
     readonly private Vector2 AspectRatio = new Vector2(1920, 1080);
 
     const string workingDirectory = "D:\\Data\\Buckeye Vertical\\Image Classifier";
     //const string workingDirectory = "U:\\Prelim Detection Dataset";
 
     public PayloadTargetContents[] payloadTargets;
+    public PayloadTargetContents[] payloadTargets2;
     public GameObject road;
     public static Boolean swapPage = false;
     public static Boolean swapRoad = false;
@@ -27,7 +28,7 @@ public class CameraScript : MonoBehaviour
     private int prevFileCount = 0;
 
     private int totalObjects = 9216;
-    private int fileCountConstant = 1152;
+    private int fileCountConstant = 0;
 
     //CHANGE THIS!!
     private int numPayloads = 8;
@@ -73,7 +74,7 @@ public class CameraScript : MonoBehaviour
     private bool RandomizeAndVerifyTargets()
     {
         bool notFailed = true;
-        Camera cam = Camera.main; // Assuming you're using the main camera
+
         List<Vector3> placedPositions = new List<Vector3>(); // To store positions of placed objects
 
         foreach (PayloadTargetContents targetContent in payloadTargets)
