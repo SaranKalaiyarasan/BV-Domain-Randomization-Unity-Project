@@ -4,18 +4,129 @@ using UnityEngine;
 
 public class ObjectSpawner : MonoBehaviour
 {
+    // Scene Objects. Any Objects we want to be randomly spawned in.
     public GameObject[] sceneObjects;
-    // Start is called before the first frame update
+    // Road object. Used mainly to get field where objects may be placed.
+    public GameObject road;
+    // Gets size of the road in Vector3 coordinates.
+    private Vector3 roadSize;
+    // Minimum number of objects to be generated
+    private int minObjects = 100;
+    // Maximum number of objects to be generated
+    private int maxObjects = 100;
+    private int gridRows = 5;
+    private int gridColumns = 3;
+    private float gridCellWidth;
+    private float gridCellHeight;
+    private int objectsToBePlaced;
 
-    // Update is called once per frame
-    void Update()
+    private Dictionary<int, List<Vector3>> gridContainers;
+
+    void Start()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        roadSize = road.GetComponent<Renderer>().bounds.size;
+        objectsToBePlaced = Random.Range(minObjects, maxObjects);
+        gridCellWidth = roadSize.x / gridColumns;
+        gridCellHeight = roadSize.z / gridRows;
+        gridContainers = new Dictionary<int, List<Vector3>>();
+        for (int i = 0; i < gridRows * gridColumns; i++)
         {
-            int randomIndex = Random.Range(0, sceneObjects.Length);
-            Vector3 randomSpawnPosition = // Position of Road Object
-            
-            Instantiate(sceneObjects[randomIndex], randomSpawnPosition, Quaternion.identity);
+            gridContainers[i] = new List<Vector3>();
         }
+
+        // Start the coroutine to spawn objects every 5 seconds
+        StartCoroutine(SpawnObjectsEveryFiveSeconds());
+    }
+
+    private IEnumerator SpawnObjectsEveryFiveSeconds()
+    {
+        while (true)
+        {
+            SpawnObjects();  // Place the objects
+            yield return new WaitForSeconds(5f);  // Wait for 5 seconds before placing again
+        }
+    }
+
+    private void SpawnObjects()
+    {
+        // Clear previous objects and grid containers
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+        gridContainers.Clear();
+
+        // Reset the grid containers for new objects
+        for (int i = 0; i < gridRows * gridColumns; i++)
+        {
+            gridContainers[i] = new List<Vector3>();
+        }
+
+        // Spawn new objects
+        for (int i = 0; i < objectsToBePlaced; i++)
+        {
+            PlaceObjectInGrid();
+        }
+    }
+
+    private void PlaceObjectInGrid()
+    {
+        int randomIndex = Random.Range(0, sceneObjects.Length);
+        GameObject selectedObject = sceneObjects[randomIndex];
+        int gridIndex = Random.Range(0, gridContainers.Count);
+
+        Vector3 gridCenter = GetGridCenter(gridIndex);
+        Vector3 spawnPosition = GetRandomPositionWithinGrid(gridCenter);
+
+        // Check to see if there are already objects in grid
+        bool overlaps = true;
+        while (overlaps)
+        {
+            overlaps = false; // Assume no overlap initially
+
+            if (gridContainers[gridIndex].Count > 0)
+            {
+                // Check for overlaps within the grid container
+                foreach (Vector3 placedPosition in gridContainers[gridIndex])
+                {
+                    if (Vector3.Distance(spawnPosition, placedPosition) < 10f) // Adjust overlap threshold
+                    {
+                        overlaps = true;
+                        break;
+                    }
+                }
+
+                // If overlapping, regenerate the spawn position within the same grid
+                if (overlaps)
+                {
+                    spawnPosition = GetRandomPositionWithinGrid(gridCenter);
+                }
+            }
+        }
+        // Place object at the valid, non-overlapping position
+        GameObject newObject = Instantiate(selectedObject, spawnPosition, Quaternion.identity);
+        newObject.transform.parent = transform;  // Set as child to maintain hierarchy
+
+        // Add position to the grid container
+        gridContainers[gridIndex].Add(spawnPosition);
+    }
+
+    private Vector3 GetGridCenter(int gridIndex)
+    {
+        int row = gridIndex / gridColumns;
+        int col = gridIndex % gridColumns;
+
+        float xPos = road.transform.position.x - (roadSize.x / 2) + (col * gridCellWidth) + (gridCellWidth / 2);
+        float zPos = road.transform.position.z - (roadSize.z / 2) + (row * gridCellHeight) + (gridCellHeight / 2);
+
+        return new Vector3(xPos, road.transform.position.y + 3.0f, zPos);
+    }
+
+    private Vector3 GetRandomPositionWithinGrid(Vector3 gridCenter)
+    {
+        float randomOffsetX = Random.Range(-gridCellWidth / 2, gridCellWidth / 2);
+        float randomOffsetZ = Random.Range(-gridCellHeight / 2, gridCellHeight / 2);
+
+        return new Vector3(gridCenter.x + randomOffsetX, gridCenter.y, gridCenter.z + randomOffsetZ);
     }
 }
