@@ -11,9 +11,9 @@ public class ObjectSpawner : MonoBehaviour
     // Gets size of the road in Vector3 coordinates.
     private Vector3 roadSize;
     // Minimum number of objects to be generated
-    private int minObjects = 100;
+    private int minObjects = 200;
     // Maximum number of objects to be generated
-    private int maxObjects = 100;
+    private int maxObjects = 300;
     private int gridRows = 5;
     private int gridColumns = 3;
     private float gridCellWidth;
@@ -21,10 +21,13 @@ public class ObjectSpawner : MonoBehaviour
     private int objectsToBePlaced;
 
     private Dictionary<int, List<Vector3>> gridContainers;
-
+    private Dictionary<int, float> objectOffsets;
     void Start()
     {
         roadSize = road.GetComponent<Renderer>().bounds.size;
+        // Reduce the X and Z sizes by 3 units on each side to avoid objects on edges of road
+        roadSize.x -= 6f;
+        roadSize.z -= 6f;
         objectsToBePlaced = Random.Range(minObjects, maxObjects);
         gridCellWidth = roadSize.x / gridColumns;
         gridCellHeight = roadSize.z / gridRows;
@@ -33,7 +36,13 @@ public class ObjectSpawner : MonoBehaviour
         {
             gridContainers[i] = new List<Vector3>();
         }
-
+        objectOffsets = new Dictionary<int, float>{
+            {0,0.6f},
+            {1,0.6f},
+            {2,0.6f},
+            {3,4.6f}, // Y Offset for bikes
+            {4,0.6f}
+        };
         // Start the coroutine to spawn objects every 5 seconds
         StartCoroutine(SpawnObjectsEveryFiveSeconds());
     }
@@ -103,10 +112,28 @@ public class ObjectSpawner : MonoBehaviour
                 }
             }
         }
+        spawnPosition.y += objectOffsets[randomIndex]; // Applied Y-offset
+
         // Place object at the valid, non-overlapping position
         GameObject newObject = Instantiate(selectedObject, spawnPosition, Quaternion.identity);
         newObject.transform.parent = transform;  // Set as child to maintain hierarchy
 
+        Renderer objectRenderer = newObject.GetComponent<Renderer>();
+        if (objectRenderer != null)
+        {
+            Bounds bounds = objectRenderer.bounds;
+            float width = bounds.size.x;
+            float height = bounds.size.y;
+            float depth = bounds.size.z;
+
+            // Store or log bounding box information
+            Debug.Log("Bounding Box Width: " + width);
+            Debug.Log("Bounding Box Height: " + height);
+            Debug.Log("Bounding Box Depth: " + depth);
+
+            // You could store this data in a structure, array, or file depending on your needs
+        }
+        Debug.Log("Through");
         // Add position to the grid container
         gridContainers[gridIndex].Add(spawnPosition);
     }
@@ -119,7 +146,7 @@ public class ObjectSpawner : MonoBehaviour
         float xPos = road.transform.position.x - (roadSize.x / 2) + (col * gridCellWidth) + (gridCellWidth / 2);
         float zPos = road.transform.position.z - (roadSize.z / 2) + (row * gridCellHeight) + (gridCellHeight / 2);
 
-        return new Vector3(xPos, road.transform.position.y + 3.0f, zPos);
+        return new Vector3(xPos, road.transform.position.y + 1.5f, zPos);
     }
 
     private Vector3 GetRandomPositionWithinGrid(Vector3 gridCenter)

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.41216332, g: 0.51106405, b: 0.85345364, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -247,12 +247,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 2.4964428, z: 71.411224, w: 52.205364}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 102133241}
-  m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
   _SortingOrder: 0
+  m_hasFontAssetChanged: 0
+  m_renderer: {fileID: 102133241}
+  m_maskType: 0
 --- !u!23 &102133241
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -310,7 +310,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &224620190
 Transform:
   m_ObjectHideFlags: 0
@@ -381,7 +381,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 243f30115ad5ba641920096f54fe14d7, type: 2}
+  - {fileID: 2100000, guid: 4c157cc8cdc264bcf9f241bcd0fdd202, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -658,7 +658,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa5afd4a97705b144ac8121a229a0d7f, type: 3}
   m_Name: 
@@ -897,12 +897,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 2.4964428, z: 71.411224, w: 52.205364}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 1069880569}
-  m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
   _SortingOrder: 0
+  m_hasFontAssetChanged: 0
+  m_renderer: {fileID: 1069880569}
+  m_maskType: 0
 --- !u!23 &1069880569
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -995,9 +995,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneObjects:
-  - {fileID: 8449815075959489074, guid: 64fd0ffb7686e89ecb809c2e0d449e5b, type: 3}
-  - {fileID: 8332450998055018987, guid: 0abee4939ed19459c8069936f2a72a3c, type: 3}
-  - {fileID: 3472139825903015523, guid: fecc5e31e9855fa9e96d4f0060114121, type: 3}
+  - {fileID: 3978156976444542998, guid: a8b1655a90145094bbbfdb3ddd350367, type: 3}
+  - {fileID: 7441440908871300343, guid: 052f0d9a551166b458c44593c6566808, type: 3}
+  - {fileID: 3169090002416453430, guid: 9b087ad3ee72dbd408584ba96bc2cc57, type: 3}
+  - {fileID: 6669599918551377397, guid: 1539865e7e6633d48ae273348fe7f433, type: 3}
+  - {fileID: 303154237037538169, guid: 7f58021dc7e4f9742bb58e20c1bbbcda, type: 3}
   road: {fileID: 609622170}
 --- !u!4 &1755071323
 Transform:

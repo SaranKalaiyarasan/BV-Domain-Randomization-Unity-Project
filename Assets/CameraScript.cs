@@ -64,7 +64,7 @@ public class CameraScript : MonoBehaviour
         cam.transform.localPosition = new Vector3(x, y, z);
 
         float rotation_y = rnd.Next(0, 359);
-        float rotation_x = rnd.Next(85, 95);
+        float rotation_x = rnd.Next(90, 90);
         cam.transform.localRotation = Quaternion.Euler(rotation_x, rotation_y, 0);
     }
 
