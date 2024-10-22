@@ -52,7 +52,7 @@ public class ObjectSpawner : MonoBehaviour
         while (true)
         {
             SpawnObjects();  // Place the objects
-            yield return new WaitForSeconds(5f);  // Wait for 5 seconds before placing again
+            yield return new WaitForSeconds(1000f);  // Wait for 5 seconds before placing again
         }
     }
 
